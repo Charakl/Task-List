@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+</head>
+<body>
+    <main>
+        <h1>Task List</h1>
+        <div class="create-task">
+            <input id="task-title" type="text" placeholder="Task">
+            <textarea id="task-description" cols="40" rows="6"></textarea>
+            <label>Priority</label>
+            <input type="radio" name="priority" value="high">high
+            <input type="radio" name="priority" value="medium">medium
+            <input type="radio" name="priority" value="low">low
+            
+            <button class="create-task-btn">Add</button>
+        </div>
+
+        <div class="buttons">
+            <button id="all-btn" class="btn">All</button>
+            <button id="completed-btn" class="btn">Completed</button>
+            <button id="pending-btn" class="btn">Pending</button>
+            <button id="sort-btn" class="btn">Sort</button>
+        </div>
+
+        <div class="tasks">
+            
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
