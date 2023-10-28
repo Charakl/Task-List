@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Task List</title>
 </head>
 <body>
@@ -11,10 +12,22 @@
         <div class="create-task">
             <input id="task-title" type="text" placeholder="Task">
             <textarea id="task-description" cols="40" rows="6"></textarea>
-            <label>Priority</label>
-            <input type="radio" name="priority" value="high">high
-            <input type="radio" name="priority" value="medium">medium
-            <input type="radio" name="priority" value="low">low
+
+
+            
+            <div class="radio-container">
+                <input type="radio" id="high" name="priority" value="high">
+                <label for="high">High</label>
+              
+                <input type="radio" id="medium" name="priority" value="medium">
+                <label for="medium">Medium</label>
+              
+                <input type="radio" id="low" name="priority" value="low">
+                <label for="low">Low</label>
+              </div>
+              
+
+            
             
             <button class="create-task-btn">Add</button>
         </div>

@@ -17,7 +17,7 @@ createTaskBtn.addEventListener('click', () => {
 
     const title = taskTitle.value;
     const description = taskDescription.value;
-    console.log(title);
+    
     let priority = '';
 
     // Find what priority got selected
@@ -56,7 +56,7 @@ function displayTasks() {
     tasks.innerHTML = '';
     // Get info from localStorage
     taskList = JSON.parse(localStorage.getItem('tasks'));
-    console.log(taskList);
+    // ssconsole.log(taskList);
     taskList.forEach((task, i) => {
         const taskHtml = `
         <div class="task">
@@ -68,11 +68,13 @@ function displayTasks() {
         tasks.insertAdjacentHTML('afterbegin', taskHtml);
     })
 
+}
+displayTasks();
+
 
 // Attach a click event listener to the tasks container (Event delegation)
 // Delete task
 tasks.addEventListener('click', (event) => {
-    console.log('koko');
     if (event.target.classList.contains('delete')) {
         // Find the index of the task to delete
         const taskIndex = event.target.getAttribute('data-index');
@@ -80,6 +82,7 @@ tasks.addEventListener('click', (event) => {
         if (taskIndex !== null) {
             // Delete the task and update the UI and local storage
             taskList.splice(taskIndex, 1);
+            console.log(taskList);
             // updateTaskList();
             localStorage.setItem('tasks', JSON.stringify(taskList));
             // updateLocalStorage(taskList);
@@ -87,6 +90,3 @@ tasks.addEventListener('click', (event) => {
         }
     }
 });
-
-}
-displayTasks();

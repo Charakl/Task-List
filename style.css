@@ -1,0 +1,69 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+  
+html {
+    font-size: 62.5%;
+}
+
+main {
+    max-width: 120rem;
+    text-align: center;
+    border: 1px solid red;
+    margin: 0 auto;
+    padding: 10rem;
+}
+
+h1 {
+    margin-bottom: 4rem;
+}
+
+#task-title {
+    width: 70rem;
+    height: 4rem;
+    padding: 0.5rem 1.8rem;
+    border-radius: 100px;
+}
+
+.create-task {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+}
+
+#task-description {
+    width: 70rem;
+    border-radius: 2rem;
+    padding: 1.8rem 1.8rem;
+}
+
+
+/* Hide default radio buttons */
+input[type="radio"] {
+    display: none;
+}
+  
+  /* Style the radio container (optional) */
+/* .radio-container {
+    display: flex;
+} */
+  
+
+input[type="radio"] + label {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border: 2px solid #000;
+    border-radius: 4rem;
+    font-size: 1.8rem;
+    text-align: center;
+    cursor: pointer;
+    margin: 0 10px; /* Add spacing between boxes */
+}
+
+input[type="radio"]:checked + label {
+    background-color: #000;
+    color: #fff;
+}
