@@ -9,11 +9,18 @@ const taskTitle = document.getElementById('task-title');
 const taskDescription = document.getElementById('task-description');
 const radioButtons = document.querySelectorAll('input[type="radio"]');
 
+const number = document.querySelector('.number');
+
+const allNum = document.getElementById('all');
+const completedNum = document.getElementById('completed');
+const pendingNum = document.getElementById('pending');
+
 let taskList = JSON.parse(localStorage.getItem('tasks')) || [];
 
 // Event Listeners
 createTaskBtn.addEventListener('click', () => {
-    // taskList = JSON.parse(localStorage.getItem('tasks')) || [];
+    taskList = JSON.parse(localStorage.getItem('tasks')) || [];
+    console.log('lalal');
 
     const title = taskTitle.value;
     const description = taskDescription.value;
@@ -38,6 +45,8 @@ createTaskBtn.addEventListener('click', () => {
         priority: priority,
         completed: false
     }
+    console.log(taskList);
+    console.log(newTask);
     taskList.push(newTask);
     localStorage.setItem('tasks', JSON.stringify(taskList));
     // updateLocalStorage(taskList);
@@ -53,20 +62,30 @@ createTaskBtn.addEventListener('click', () => {
 // }
 
 function displayTasks() {
+    taskList = JSON.parse(localStorage.getItem('tasks')) || [];
     tasks.innerHTML = '';
     // Get info from localStorage
     taskList = JSON.parse(localStorage.getItem('tasks'));
-    // ssconsole.log(taskList);
-    taskList.forEach((task, i) => {
+    let completedTasks = 0;
+    taskList?.forEach((task, i) => {
         const taskHtml = `
         <div class="task">
-            <input type="text" placeholder="${task.title}">
-            <button data-index="${i}" class="edit btn">EDIT</button>
-            <button data-index="${i}" class="delete btn">DELETE</button>
+            <input type="text" class="input-task" value="${task.title}" disabled>
+            <div class="action-buttons">
+                <button data-index="${i}" class="edit btn">EDIT</button>
+                <button data-index="${i}" class="delete btn">DELETE</button>
+            </div>
+            
         </div>
         `;
         tasks.insertAdjacentHTML('afterbegin', taskHtml);
+        task.completed && completedTasks++;
     })
+
+    allNum.textContent = taskList.length;
+
+    completedNum.textContent = completedTasks;
+    pendingNum.textContent = taskList.length - completedTasks;
 
 }
 displayTasks();
