@@ -17,6 +17,10 @@ const pendingNum = document.getElementById('pending');
 
 let taskList = JSON.parse(localStorage.getItem('tasks')) || [];
 
+// Global variables to store original counts
+let allTasksCount = 0;
+let completedTasksCount = 0;
+
 // Event Listeners
 createTaskBtn.addEventListener('click', () => {
     taskList = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -49,47 +53,74 @@ createTaskBtn.addEventListener('click', () => {
     console.log(newTask);
     taskList.push(newTask);
     localStorage.setItem('tasks', JSON.stringify(taskList));
-    // updateLocalStorage(taskList);
 
-    // console.log(taskList);
-    displayTasks();
+    displayAllTasks();
     
 })
 
-// function updateLocalStorage(taskList) {
-//     console.log('sodfh');
-//     localStorage.setItem('tasks', JSON.stringify(taskList));
-// }
+allBtn.addEventListener('click', () => {
+    displayAllTasks();
+    setButtonSelected('all');
+});
 
-function displayTasks() {
-    taskList = JSON.parse(localStorage.getItem('tasks')) || [];
+completedBtn.addEventListener('click', () => {
+    displayCompletedTasks();
+    setButtonSelected('completed');
+});
+
+pendingBtn.addEventListener('click', () => {
+    displayPendingTasks();
+    setButtonSelected('pending');
+});
+
+
+// Function to display all the tasks
+function displayAllTasks() {
+    allTasksCount = 0;
+    completedTasksCount = 0;
+    allTasksCount = taskList.length;
+    taskList.forEach(task => task.completed && completedTasksCount++);
+     
+    const completedTasks = taskList;
+    displayFilteredTasks(completedTasks);
+}
+
+// Function to display completed tasks
+function displayCompletedTasks() {
+    const completedTasks = taskList.filter(task => task.completed);
+    displayFilteredTasks(completedTasks);
+}
+
+// Function to display pending tasks
+function displayPendingTasks() {
+    const pendingTasks = taskList.filter(task => !task.completed);
+    displayFilteredTasks(pendingTasks);
+}
+
+function displayFilteredTasks(filteredTasks) {
     tasks.innerHTML = '';
-    // Get info from localStorage
-    taskList = JSON.parse(localStorage.getItem('tasks'));
     let completedTasks = 0;
-    taskList?.forEach((task, i) => {
+    filteredTasks.forEach((task, i) => {
         const taskHtml = `
-        <div class="task">
+        <div class="task ${task.completed ? 'completed' : ''}">
             <input type="text" class="input-task" value="${task.title}" disabled>
             <div class="action-buttons">
                 <button data-index="${i}" class="edit btn">EDIT</button>
                 <button data-index="${i}" class="delete btn">DELETE</button>
             </div>
-            
         </div>
         `;
         tasks.insertAdjacentHTML('afterbegin', taskHtml);
         task.completed && completedTasks++;
-    })
+    });
 
-    allNum.textContent = taskList.length;
-
-    completedNum.textContent = completedTasks;
-    pendingNum.textContent = taskList.length - completedTasks;
-
+    allNum.textContent = allTasksCount;
+    completedNum.textContent = completedTasksCount;
+    pendingNum.textContent = allTasksCount - completedTasksCount;
 }
-displayTasks();
 
+
+displayAllTasks();
 
 // Attach a click event listener to the tasks container (Event delegation)
 // Delete task
@@ -105,7 +136,7 @@ tasks.addEventListener('click', (event) => {
             // updateTaskList();
             localStorage.setItem('tasks', JSON.stringify(taskList));
             // updateLocalStorage(taskList);
-            displayTasks(); // Update the displayed tasks after deletion
+            displayAllTasks(); // Update the displayed tasks after deletion
         }
     }
 });
