@@ -54,7 +54,13 @@ createTaskBtn.addEventListener('click', () => {
     taskList.push(newTask);
     localStorage.setItem('tasks', JSON.stringify(taskList));
 
+    
+
     displayAllTasks();
+
+    // Clear the input fields
+    taskTitle.value = '';
+    taskDescription.value = '';
     
 })
 
@@ -103,15 +109,36 @@ function displayFilteredTasks(filteredTasks) {
     filteredTasks.forEach((task, i) => {
         const taskHtml = `
         <div class="task ${task.completed ? 'completed' : ''}">
+            <label class="custom-checkbox">
+                <input type="checkbox" ${task.completed ? 'checked' : ''}>
+                <span class="checkmark"></span>
+            </label>
             <input type="text" class="input-task" value="${task.title}" disabled>
-            <div class="action-buttons">
-                <button data-index="${i}" class="edit btn">EDIT</button>
-                <button data-index="${i}" class="delete btn">DELETE</button>
+            <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke-width="1.5" 
+                stroke="currentColor" 
+                class="icon">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+            <div class="hidden-box">
+                <p class="hidden-description">Notes: ${task.description}</p>
+                <p class="hidden-priority">Priority: ${task.priority}</p>
+                <div class="action-buttons">
+                    <button data-index="${i}" class="edit btn">EDIT</button>
+                    <button data-index="${i}" class="delete btn">DELETE</button>
+                </div>
             </div>
+
         </div>
         `;
         tasks.insertAdjacentHTML('afterbegin', taskHtml);
         task.completed && completedTasks++;
+
+        // Need to study about event delegation
+
     });
 
     allNum.textContent = allTasksCount;
@@ -138,5 +165,29 @@ tasks.addEventListener('click', (event) => {
             // updateLocalStorage(taskList);
             displayAllTasks(); // Update the displayed tasks after deletion
         }
+    }
+});
+
+
+
+// Attach a click event listener to the tasks container (Event delegation)
+// Show/hide additional task details
+tasks.addEventListener('click', (event) => {
+    const taskElement = event.target.closest('.task');
+
+    if (taskElement) {
+        const hiddenBox = taskElement.querySelector('.hidden-box');
+
+        // if (hiddenBox) {
+            const isVisible = hiddenBox.classList.contains('visible');
+
+            if (isVisible) {
+                hiddenBox.style.maxHeight = '0'; // Set max-height to 0 to hide the box
+                hiddenBox.classList.remove('visible');
+            } else {
+                hiddenBox.classList.add('visible');
+                hiddenBox.style.maxHeight = hiddenBox.scrollHeight + 'px'; // Set max-height to the actual height
+            }
+        // }
     }
 });

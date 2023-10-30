@@ -12,14 +12,12 @@
         <div class="create-task">
             <input id="task-title" type="text" placeholder="Task">
             <textarea id="task-description" cols="40" rows="6" placeholder="Description"></textarea>
-
-
             
             <div class="radio-container">
                 <input type="radio" id="high" name="priority" value="high">
                 <label for="high">High</label>
               
-                <input type="radio" id="medium" name="priority" value="medium">
+                <input type="radio" id="medium" name="priority" value="medium" checked>
                 <label for="medium">Medium</label>
               
                 <input type="radio" id="low" name="priority" value="low">
@@ -28,6 +26,8 @@
               
             <button class="create-task-btn">Add</button>
         </div>
+
+        
 
         <div class="buttons">
             <button id="all-btn" class="btn">All <span id="all" class="number"></span></button>
