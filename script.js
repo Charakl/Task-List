@@ -4,6 +4,7 @@ const completedBtn = document.getElementById('completed-btn');
 const pendingBtn = document.getElementById('pending-btn');
 const sortBtn = document.getElementById('sort-btn');
 const tasks = document.querySelector('.tasks');
+const inputTask = document.querySelector('.input-task');
 
 const taskTitle = document.getElementById('task-title');
 const taskDescription = document.getElementById('task-description');
@@ -14,6 +15,9 @@ const number = document.querySelector('.number');
 const allNum = document.getElementById('all');
 const completedNum = document.getElementById('completed');
 const pendingNum = document.getElementById('pending');
+
+const arrow = document.querySelector('.icon');
+
 
 let taskList = JSON.parse(localStorage.getItem('tasks')) || [];
 
@@ -54,13 +58,11 @@ createTaskBtn.addEventListener('click', () => {
     taskList.push(newTask);
     localStorage.setItem('tasks', JSON.stringify(taskList));
 
-    
-
     displayAllTasks();
 
     // Clear the input fields
     taskTitle.value = '';
-    taskDescription.value = '';
+    taskDescription.value = ''; 
     
 })
 
@@ -124,8 +126,19 @@ function displayFilteredTasks(filteredTasks) {
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
             </svg>
             <div class="hidden-box">
-                <p class="hidden-description">Notes: ${task.description}</p>
+                <p>Notes: ${task.description}</p>
+                <textarea id="hidden-description" cols="30" rows="5" placeholder="Description" disabled>${task.description}</textarea>
                 <p class="hidden-priority">Priority: ${task.priority}</p>
+                <div class="radio-container">
+                    <input type="radio" id="high-${i}" name="priority-${i}" value="high" ${task.priority === 'high' ? 'checked' : ''}>
+                    <label for="high-${i}">High</label>
+
+                    <input type="radio" id="medium-${i}" name="priority-${i}" value="medium" ${task.priority === 'medium' ? 'checked' : ''}>
+                    <label for="medium-${i}">Medium</label>
+
+                    <input type="radio" id="low-${i}" name="priority-${i}" value="low" ${task.priority === 'low' ? 'checked' : ''}>
+                    <label for="low-${i}">Low</label>
+                </div>
                 <div class="action-buttons">
                     <button data-index="${i}" class="edit btn">EDIT</button>
                     <button data-index="${i}" class="delete btn">DELETE</button>
@@ -168,17 +181,55 @@ tasks.addEventListener('click', (event) => {
     }
 });
 
+// Edit task
+tasks.addEventListener('click', (event) => {
+    if (event.target.classList.contains('edit')) {
+        // Find the index of the task to edit
+        const taskIndex = event.target.getAttribute('data-index');
 
+        if (taskIndex !== null) {
+            // Allow editing of the task details by enabling the input field
+            const taskElement = event.target.closest('.task');
+            const inputField = taskElement.querySelector('.input-task');
+            // getElementEyId will not work
+            const textArea = taskElement.querySelector('#hidden-description');
+            inputField.disabled = false;
+            textArea.disabled = false;
 
-// Attach a click event listener to the tasks container (Event delegation)
+            // Change the button text to 'Save'
+            // event.target.textContent = 'SAVE';
+            // event.target.textContent === 'EDIT' ? event.target.textContent = 'SAVE' : event.target.textContent = 'EDIT';
+            if (event.target.textContent === 'EDIT') {
+                event.target.textContent = 'SAVE';
+            } else {
+                event.target.textContent = 'EDIT';
+                inputField.disabled = true;
+                textArea.disabled = true;
+                console.log(inputField.value);
+                // const newTask = {
+                //     title: title,
+                //     description: description,
+                //     priority: priority,
+                //     completed: false
+                // }
+                taskList[taskIndex].title = inputField.value;
+                taskList[taskIndex].description = textArea.value;
+                localStorage.setItem('tasks', JSON.stringify(taskList));
+            }
+            // Stop the propagation of this specific event
+            event.stopPropagation();
+        }
+    }
+});
+
 // Show/hide additional task details
 tasks.addEventListener('click', (event) => {
-    const taskElement = event.target.closest('.task');
+    // const taskElement = event.target.closest('.task');
 
-    if (taskElement) {
+    if (event.target.classList.contains('icon')) {
+        const taskElement = event.target.closest('.task');
         const hiddenBox = taskElement.querySelector('.hidden-box');
-
-        // if (hiddenBox) {
+        if (hiddenBox) {
             const isVisible = hiddenBox.classList.contains('visible');
 
             if (isVisible) {
@@ -188,6 +239,6 @@ tasks.addEventListener('click', (event) => {
                 hiddenBox.classList.add('visible');
                 hiddenBox.style.maxHeight = hiddenBox.scrollHeight + 'px'; // Set max-height to the actual height
             }
-        // }
+        }
     }
 });
