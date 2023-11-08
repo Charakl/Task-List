@@ -110,7 +110,7 @@ function displayFilteredTasks(filteredTasks) {
     let completedTasks = 0;
     filteredTasks.forEach((task, i) => {
         const taskHtml = `
-        <div class="task ${task.completed ? 'completed' : ''}">
+        <div class="task ${task.completed ? 'completed' : ''}" data-index="${i}">
             <label class="custom-checkbox">
                 <input type="checkbox" ${task.completed ? 'checked' : ''}>
                 <span class="checkmark"></span>
@@ -186,6 +186,7 @@ tasks.addEventListener('click', (event) => {
     if (event.target.classList.contains('edit')) {
         // Find the index of the task to edit
         const taskIndex = event.target.getAttribute('data-index');
+        console.log(taskIndex);
 
         if (taskIndex !== null) {
             // Allow editing of the task details by enabling the input field
@@ -221,6 +222,23 @@ tasks.addEventListener('click', (event) => {
         }
     }
 });
+
+// Edit task priority
+tasks.addEventListener('change', (event) => {
+    if (event.target.matches('input[type="radio"]')) {
+        const taskElement = event.target.closest('.task');
+        if (taskElement) {
+            const taskIndex = taskElement.getAttribute('data-index');
+            console.log('the' + taskIndex);
+            const selectedValue = event.target.value;
+            // const taskIndex = Array.from(tasks.children).indexOf(taskElement);
+            // console.log("Task index:", taskIndex);
+            console.log("Selected value:", selectedValue);
+            taskList[taskIndex].priority = selectedValue;
+            localStorage.setItem('tasks', JSON.stringify(taskList));
+        }
+    }
+})
 
 // Show/hide additional task details
 tasks.addEventListener('click', (event) => {
