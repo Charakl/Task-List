@@ -112,7 +112,7 @@ function displayFilteredTasks(filteredTasks) {
         const taskHtml = `
         <div class="task ${task.completed ? 'completed' : ''}" data-index="${i}">
             <label class="custom-checkbox">
-                <input type="checkbox" ${task.completed ? 'checked' : ''}>
+                <input class="checkbox" type="checkbox" ${task.completed ? 'checked' : ''}>
                 <span class="checkmark"></span>
             </label>
             <input type="text" class="input-task" value="${task.title}" disabled>
@@ -180,6 +180,42 @@ tasks.addEventListener('click', (event) => {
         }
     }
 });
+
+// Complete/Uncomplete task
+
+// Event Delegation 
+// The event listener is attached to the tasks element. It listens for the 'change' event bubbling up from 
+// its children. When a change event occurs within the tasks element or its children, the function is 
+// triggered. The function then checks if the event target (the element that triggered the event) has 
+// the class 'checkbox'. This allows you to selectively respond to change events specifically on elements 
+// with the 'checkbox' class.
+
+// This is a form of event delegation because the parent element (tasks) is handling events on behalf of 
+// its children, allowing you to control or manipulate certain elements based on specific conditions without 
+// attaching individual event listeners to each child element. Event delegation can improve performance and 
+// makes your code more maintainable, especially when dealing with a large number of elements.
+
+// The concept of delegation is related to entrusting tasks or responsibilities to another person or 
+// entity. In the context of programming and events (as in event delegation), it refers to the process of 
+// assigning the responsibility of handling events to a parent or higher-level element, allowing it to 
+// manage events on behalf of its children. This term is commonly used in software development and 
+// programming to describe this method of event handling.
+
+tasks.addEventListener('change', (event) => {
+    // It ensures that the change event is related to an element with the 'checkbox' class.
+    if (event.target.classList.contains('checkbox')) {
+        // finds the closest ancestor of the event target that has the class 'task'.
+        const taskElement = event.target.closest('.task');
+        if (taskElement) {
+            const taskIndex = taskElement.getAttribute('data-index');
+            const isChecked = event.target.checked;
+            console.log('the' + taskIndex);
+            console.log('is checked' + isChecked);
+            taskList[taskIndex].completed = isChecked;
+            localStorage.setItem('tasks', JSON.stringify(taskList));
+        }
+    }
+})
 
 // Edit task
 tasks.addEventListener('click', (event) => {
