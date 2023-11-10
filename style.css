@@ -88,6 +88,7 @@ input[type="radio"]:checked + label {
 
 .task {
     width: 70rem;
+    height: auto;
     padding: 1rem;
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -106,17 +107,29 @@ input[type="radio"]:checked + label {
     border: none;
     color: #000;
     font-size: 1.6rem;
+    font-weight: 600;
+    background-color: transparent;
+    padding: 0.4rem 0.8rem;
+   
 }
 
-.input-task:disabled {
-    opacity: 1;
-    cursor: pointer;
+.input-task:focus {
+    border-bottom: 0.2rem inset black !important;
+  outline: none;
 }
 
 .icon {
     width: 24px;
     height: 24px;
-    stroke: #087f5b
+    stroke: #087f5b;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.icon:hover {
+    background-color: #d9e4e1;
+    border-radius: 50%;
 }
 
 .action-buttons {
@@ -131,16 +144,37 @@ input[type="radio"]:checked + label {
 .hidden-box {
     font-size: 1.8rem;
     grid-column: 2;
-
-    
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-in-out;
-    
+}
+
+.notes-label {
+    display: block;
+    margin-top: 1.4rem;
+    padding-left: 0.8rem;
 }
 
 .hidden-description {
-    margin-top: 1rem;
+    width: 100%;
+    height: auto;
+    max-height: 20rem;
+    padding: 0.8rem 0.8rem;
+    background-color: transparent;
+    border: none;
+    pointer-events: none;
+    resize: none;
+    color: #000;
+    overflow-y: hidden;
+}
+
+.notDisabled {
+    margin-top: 0.2rem;
+    border: 1px solid black;
+    pointer-events: auto;
+    resize: both;
+    border-radius: 0.6rem;
+    overflow-y: visible;
 }
 
 .custom-checkbox {
@@ -180,4 +214,10 @@ input[type="radio"]:checked + label {
 /* On hover, style the checkbox */
 .custom-checkbox:hover input ~ .checkmark {
   background-color: #f2f2f2;
+}
+
+.hidden-priority {
+    padding-left: 0.8rem;
+    /* margin-top: 1rem; */
+    margin-bottom: 0.6rem;
 }

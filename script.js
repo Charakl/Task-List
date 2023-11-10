@@ -81,6 +81,13 @@ pendingBtn.addEventListener('click', () => {
     setButtonSelected('pending');
 });
 
+function adjustTextareaHeight() {
+    var textarea = document.querySelector('.hidden-description');
+    // textarea.style.height = 'auto'; // Reset height to auto
+    textarea.style.height = (textarea.scrollHeight) + 'px'; // Set the height to the scrollHeight
+    
+}
+
 
 // Function to display all the tasks
 function displayAllTasks() {
@@ -88,6 +95,7 @@ function displayAllTasks() {
     completedTasksCount = 0;
     allTasksCount = taskList.length;
     taskList.forEach(task => task.completed && completedTasksCount++);
+    // hiddenDescription.style.height = hiddenDescription.scrollHeight + 'px';
      
     const completedTasks = taskList;
     displayFilteredTasks(completedTasks);
@@ -116,6 +124,7 @@ function displayFilteredTasks(filteredTasks) {
                 <span class="checkmark"></span>
             </label>
             <input type="text" class="input-task" value="${task.title}" disabled>
+            
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 fill="none" 
@@ -125,10 +134,12 @@ function displayFilteredTasks(filteredTasks) {
                 class="icon">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
             </svg>
+            
+            
             <div class="hidden-box">
-                <p>Notes: ${task.description}</p>
-                <textarea id="hidden-description" cols="30" rows="5" placeholder="Description" disabled>${task.description}</textarea>
-                <p class="hidden-priority">Priority: ${task.priority}</p>
+                <label class="notes-label">Notes:</label>
+                <textarea class="hidden-description" placeholder="Description" disabled>${task.description}</textarea>
+                <p class="hidden-priority">Priority:</p>
                 <div class="radio-container">
                     <input type="radio" id="high-${i}" name="priority-${i}" value="high" ${task.priority === 'high' ? 'checked' : ''}>
                     <label for="high-${i}">High</label>
@@ -151,6 +162,7 @@ function displayFilteredTasks(filteredTasks) {
         task.completed && completedTasks++;
 
         // Need to study about event delegation
+        adjustTextareaHeight();
 
     });
 
@@ -203,6 +215,8 @@ tasks.addEventListener('click', (event) => {
 
 tasks.addEventListener('change', (event) => {
     // It ensures that the change event is related to an element with the 'checkbox' class.
+    // event.target -> where the event originated
+    console.log(event.target);
     if (event.target.classList.contains('checkbox')) {
         // finds the closest ancestor of the event target that has the class 'task'.
         const taskElement = event.target.closest('.task');
@@ -229,7 +243,7 @@ tasks.addEventListener('click', (event) => {
             const taskElement = event.target.closest('.task');
             const inputField = taskElement.querySelector('.input-task');
             // getElementEyId will not work
-            const textArea = taskElement.querySelector('#hidden-description');
+            const textArea = taskElement.querySelector('.hidden-description');
             inputField.disabled = false;
             textArea.disabled = false;
 
@@ -238,11 +252,28 @@ tasks.addEventListener('click', (event) => {
             // event.target.textContent === 'EDIT' ? event.target.textContent = 'SAVE' : event.target.textContent = 'EDIT';
             if (event.target.textContent === 'EDIT') {
                 event.target.textContent = 'SAVE';
+                // inputField.classList.add('')
+                inputField.disabled ? '' : inputField.style.borderBottom = '1px solid black';
+                textArea.classList.add('notDisabled');
+                // if (!textArea.disabled) {
+                //     textArea.style.border = '1px solid red';
+                //     textArea.style.pointerEvents = 'auto';
+                //     textArea.style.resize = 'both';
+                // }
             } else {
                 event.target.textContent = 'EDIT';
                 inputField.disabled = true;
                 textArea.disabled = true;
+                textArea.classList.remove('notDisabled');
+                inputField.disabled && (inputField.style.borderBottom = 'none');
                 console.log(inputField.value);
+                adjustTextareaHeight();
+                // inputField.disabled ? '' : inputField.style.borderBottom = '1px solid red';
+                // if (!textArea.disabled) {
+                //     textArea.style.border = '1px solid red';
+                //     textArea.style.pointerEvents = 'auto';
+                //     textArea.style.resize = 'both';
+                // }
                 // const newTask = {
                 //     title: title,
                 //     description: description,
