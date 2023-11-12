@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
     <title>Task List</title>
 </head>
@@ -27,13 +32,11 @@
             <button class="create-task-btn">Add</button>
         </div>
 
-        
-
         <div class="buttons">
-            <button id="all-btn" class="btn">All <span id="all" class="number"></span></button>
-            <button id="completed-btn" class="btn">Completed <span id="completed" class="number"></span></button>
-            <button id="pending-btn" class="btn">Pending <span id="pending" class="number"></span></button>
-            <button id="sort-btn" class="btn">Sort</button>
+            <button id="all-btn" class="btn pos-helper active">All <span id="all" class="number"></span></button>
+            <button id="completed-btn" class="btn pos-helper">Completed <span id="completed" class="number"></span></button>
+            <button id="pending-btn" class="btn pos-helper">Pending <span id="pending" class="number"></span></button>
+            <button id="sort-btn" class="btn pos-helper">Sort</button>
         </div>
 
         <div class="tasks">

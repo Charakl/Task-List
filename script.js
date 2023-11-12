@@ -119,6 +119,7 @@ function displayFilteredTasks(filteredTasks) {
     filteredTasks.forEach((task, i) => {
         const taskHtml = `
         <div class="task ${task.completed ? 'completed' : ''}" data-index="${i}">
+            
             <label class="custom-checkbox">
                 <input class="checkbox" type="checkbox" ${task.completed ? 'checked' : ''}>
                 <span class="checkmark"></span>
