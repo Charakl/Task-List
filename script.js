@@ -18,6 +18,8 @@ const pendingNum = document.getElementById('pending');
 
 const arrow = document.querySelector('.icon');
 
+const buttons = document.querySelector('.buttons');
+
 
 let taskList = JSON.parse(localStorage.getItem('tasks')) || [];
 
@@ -68,17 +70,28 @@ createTaskBtn.addEventListener('click', () => {
 
 allBtn.addEventListener('click', () => {
     displayAllTasks();
-    setButtonSelected('all');
+    const children = buttons.children;
+    [...children].forEach(c => c.classList.remove('active'));
+    allBtn.classList.add('active');
+    // setButtonSelected('all');
+
 });
 
 completedBtn.addEventListener('click', () => {
     displayCompletedTasks();
-    setButtonSelected('completed');
+    const children = buttons.children;
+    [...children].forEach(c => c.classList.remove('active'));
+    completedBtn.classList.add('active');
+
+    // setButtonSelected('completed');
 });
 
 pendingBtn.addEventListener('click', () => {
     displayPendingTasks();
-    setButtonSelected('pending');
+    const children = buttons.children;
+    [...children].forEach(c => c.classList.remove('active'));
+    pendingBtn.classList.add('active');
+    // setButtonSelected('pending');
 });
 
 function adjustTextareaHeight() {
@@ -116,6 +129,7 @@ function displayPendingTasks() {
 function displayFilteredTasks(filteredTasks) {
     tasks.innerHTML = '';
     let completedTasks = 0;
+    
     filteredTasks.forEach((task, i) => {
         const taskHtml = `
         <div class="task ${task.completed ? 'completed' : ''}" data-index="${i}">
@@ -132,9 +146,22 @@ function displayFilteredTasks(filteredTasks) {
                 viewBox="0 0 24 24" 
                 stroke-width="1.5" 
                 stroke="currentColor" 
-                class="icon">
+                id="arrow-down"
+                class="icon visible">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
             </svg>
+
+            <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke-width="1.5" 
+                stroke="currentColor"
+                id="arrow-up" 
+                class="icon hidden hide">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+
             
             
             <div class="hidden-box">
@@ -309,22 +336,40 @@ tasks.addEventListener('change', (event) => {
 })
 
 // Show/hide additional task details
-tasks.addEventListener('click', (event) => {
+// tasks.addEventListener('click', (event) => {
     // const taskElement = event.target.closest('.task');
 
-    if (event.target.classList.contains('icon')) {
-        const taskElement = event.target.closest('.task');
-        const hiddenBox = taskElement.querySelector('.hidden-box');
-        if (hiddenBox) {
-            const isVisible = hiddenBox.classList.contains('visible');
+    // ['arrow-up', 'arrow-down'].forEach(id => {
+    //     const element = document.getElementById(id);
+    //     element.classList.toggle('visible');
+    //     element.classList.toggle('hidden');
+    //   });
 
-            if (isVisible) {
-                hiddenBox.style.maxHeight = '0'; // Set max-height to 0 to hide the box
-                hiddenBox.classList.remove('visible');
-            } else {
-                hiddenBox.classList.add('visible');
-                hiddenBox.style.maxHeight = hiddenBox.scrollHeight + 'px'; // Set max-height to the actual height
+    
+
+    document.querySelectorAll('.icon').forEach(icon => {
+        icon.addEventListener('click', (event) => {
+            const taskElement = event.target.closest('.task');
+            console.log(taskElement);
+            const hiddenBox = taskElement.querySelector('.hidden-box');
+            
+            ['arrow-up', 'arrow-down'].forEach(id => {
+                const element = taskElement.querySelector(`#${id}`);
+                element.classList.toggle('hidden');
+            });
+    
+            if (hiddenBox) {
+                const isVisible = hiddenBox.classList.contains('visible');
+    
+                if (isVisible) {
+                    hiddenBox.style.maxHeight = '0'; // Set max-height to 0 to hide the box
+                    hiddenBox.classList.remove('visible');
+                } else {
+                    hiddenBox.classList.add('visible');
+                    hiddenBox.style.maxHeight = hiddenBox.scrollHeight + 'px'; // Set max-height to the actual height
+                }
             }
-        }
-    }
-});
+        });
+    });
+// });
+
