@@ -23,6 +23,8 @@ const buttons = document.querySelector('.buttons');
 
 let taskList = JSON.parse(localStorage.getItem('tasks')) || [];
 
+
+
 // Global variables to store original counts
 let allTasksCount = 0;
 let completedTasksCount = 0;
@@ -69,6 +71,7 @@ createTaskBtn.addEventListener('click', () => {
 })
 
 allBtn.addEventListener('click', () => {
+    console.log('all button clicked');
     displayAllTasks();
     const children = buttons.children;
     [...children].forEach(c => c.classList.remove('active'));
@@ -78,6 +81,7 @@ allBtn.addEventListener('click', () => {
 });
 
 completedBtn.addEventListener('click', () => {
+    console.log('Completed button clicked');
     displayCompletedTasks();
     const children = buttons.children;
     [...children].forEach(c => c.classList.remove('active'));
@@ -87,11 +91,34 @@ completedBtn.addEventListener('click', () => {
 });
 
 pendingBtn.addEventListener('click', () => {
+    console.log('pending button clicked');
     displayPendingTasks();
     const children = buttons.children;
     [...children].forEach(c => c.classList.remove('active'));
     pendingBtn.classList.add('active');
     // setButtonSelected('pending');
+});
+
+sortBtn.addEventListener('click', () => {
+    console.log('sort button clicked');
+    // console.log(tasks);
+    
+    const priorityMap = { high: 1, medium: 2, low: 3 };
+    
+    // Modifying the copy or original won't affect the other
+    const sortedTasks = [...taskList]
+    // The sort method takes a comparison function as an argument.
+    sortedTasks.sort((task1, task2) => {
+        // If a negative value is returned, it means that task1 should come before task2 in the sorted 
+        // array. If zero is returned, the order remains unchanged, and if a positive value is returned, 
+        // task1 should come after task2.
+        return priorityMap[task1.priority] - priorityMap[task2.priority];
+    });
+      console.log(sortedTasks);
+    displayFilteredTasks(sortedTasks);
+    const children = buttons.children;
+    [...children].forEach(c => c.classList.remove('active'));
+    sortBtn.classList.add('active');
 });
 
 function adjustTextareaHeight() {
@@ -337,39 +364,73 @@ tasks.addEventListener('change', (event) => {
 
 // Show/hide additional task details
 // tasks.addEventListener('click', (event) => {
-    // const taskElement = event.target.closest('.task');
+//     // const taskElement = event.target.closest('.task');
 
-    // ['arrow-up', 'arrow-down'].forEach(id => {
-    //     const element = document.getElementById(id);
-    //     element.classList.toggle('visible');
-    //     element.classList.toggle('hidden');
-    //   });
+//     // ['arrow-up', 'arrow-down'].forEach(id => {
+//     //     const element = document.getElementById(id);
+//     //     element.classList.toggle('visible');
+//     //     element.classList.toggle('hidden');
+//     //   });
 
     
 
-    document.querySelectorAll('.icon').forEach(icon => {
-        icon.addEventListener('click', (event) => {
-            const taskElement = event.target.closest('.task');
-            console.log(taskElement);
-            const hiddenBox = taskElement.querySelector('.hidden-box');
+//     document.querySelectorAll('.icon').forEach(icon => {
+//         icon.addEventListener('click', (event) => {
+//             const taskElement = event.target.closest('.task');
+//             console.log(taskElement);
+//             const hiddenBox = taskElement.querySelector('.hidden-box');
             
+//             ['arrow-up', 'arrow-down'].forEach(id => {
+//                 const element = taskElement.querySelector(`#${id}`);
+//                 element.classList.toggle('hidden');
+//             });
+    
+//             if (hiddenBox) {
+//                 const isVisible = hiddenBox.classList.contains('visible');
+    
+//                 if (isVisible) {
+//                     hiddenBox.style.maxHeight = '0'; // Set max-height to 0 to hide the box
+//                     hiddenBox.classList.remove('visible');
+//                 } else {
+//                     hiddenBox.classList.add('visible');
+//                     hiddenBox.style.maxHeight = hiddenBox.scrollHeight + 'px'; // Set max-height to the actual height
+//                 }
+//             }
+//         });
+//     });
+// });
+
+
+
+
+
+
+tasks.addEventListener('click', (event) => {
+    const taskElement = event.target.closest('.task');
+
+    if (taskElement) {
+        const icon = taskElement.querySelector('.icon');
+        console.log(icon);
+        console.log(event.target);
+        if (icon && event.target === icon) {
+            const hiddenBox = taskElement.querySelector('.hidden-box');
+
             ['arrow-up', 'arrow-down'].forEach(id => {
                 const element = taskElement.querySelector(`#${id}`);
                 element.classList.toggle('hidden');
             });
-    
+
             if (hiddenBox) {
                 const isVisible = hiddenBox.classList.contains('visible');
-    
+
                 if (isVisible) {
-                    hiddenBox.style.maxHeight = '0'; // Set max-height to 0 to hide the box
+                    hiddenBox.style.maxHeight = '0';
                     hiddenBox.classList.remove('visible');
                 } else {
                     hiddenBox.classList.add('visible');
-                    hiddenBox.style.maxHeight = hiddenBox.scrollHeight + 'px'; // Set max-height to the actual height
+                    hiddenBox.style.maxHeight = hiddenBox.scrollHeight + 'px';
                 }
             }
-        });
-    });
-// });
-
+        }
+    }
+});
