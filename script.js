@@ -35,6 +35,16 @@ createTaskBtn.addEventListener('click', () => {
     console.log('lalal');
 
     const title = taskTitle.value;
+
+    if (title === '') {
+        console.log('empty task');
+        errorMessage.textContent = "Please fill in the task field";
+        return;
+    } else {
+        errorMessage.textContent = "";
+    }
+    console.log('non');
+
     const description = taskDescription.value;
     
     let priority = '';
@@ -82,10 +92,12 @@ allBtn.addEventListener('click', () => {
 
 completedBtn.addEventListener('click', () => {
     console.log('Completed button clicked');
-    displayCompletedTasks();
+    
     const children = buttons.children;
     [...children].forEach(c => c.classList.remove('active'));
     completedBtn.classList.add('active');
+    console.log('lala');
+    displayCompletedTasks();
 
     // setButtonSelected('completed');
 });
@@ -99,14 +111,16 @@ pendingBtn.addEventListener('click', () => {
     // setButtonSelected('pending');
 });
 
-sortBtn.addEventListener('click', () => {
+// Sort Tasks
+// *Remember that i have afterbegin to display the tasks!!!
+function displaySortedTasks () {
     console.log('sort button clicked');
     // console.log(tasks);
     
-    const priorityMap = { high: 1, medium: 2, low: 3 };
+    const priorityMap = { low: 1, medium: 2, high: 3 };
     
     // Modifying the copy or original won't affect the other
-    const sortedTasks = [...taskList]
+    const sortedTasks = [...taskList];
     // The sort method takes a comparison function as an argument.
     sortedTasks.sort((task1, task2) => {
         // If a negative value is returned, it means that task1 should come before task2 in the sorted 
@@ -119,7 +133,8 @@ sortBtn.addEventListener('click', () => {
     const children = buttons.children;
     [...children].forEach(c => c.classList.remove('active'));
     sortBtn.classList.add('active');
-});
+}
+sortBtn.addEventListener('click', displaySortedTasks);
 
 function adjustTextareaHeight() {
     var textarea = document.querySelector('.hidden-description');
@@ -156,12 +171,35 @@ function displayPendingTasks() {
 function displayFilteredTasks(filteredTasks) {
     tasks.innerHTML = '';
     let completedTasks = 0;
+
+    
     
     filteredTasks.forEach((task, i) => {
+
+        let borderColor = '';
+
+        // Determine border color based on priority
+        switch (task.priority) {
+            case 'high':
+                borderColor = '#FF6F61';
+                break;
+            case 'medium':
+                borderColor = '#FFD700';
+                break;
+            case 'low':
+                borderColor = '#ADFF2F';
+                break;
+            // Add more cases if needed
+
+            default:
+                borderColor = 'black'; // Default color if priority is not recognized
+        }
+
         const taskHtml = `
-        <div class="task ${task.completed ? 'completed' : ''}" data-index="${i}">
+        <div class="task ${task.completed ? 'completed' : ''}" data-index="${i}" style="border: 2px solid ${borderColor};">
             
-            <label class="custom-checkbox">
+            <!-- added the checked class for the line-through style -->
+            <label class="custom-checkbox ${task.completed ? 'completed' : ''}">
                 <input class="checkbox" type="checkbox" ${task.completed ? 'checked' : ''}>
                 <span class="checkmark"></span>
             </label>
@@ -193,7 +231,8 @@ function displayFilteredTasks(filteredTasks) {
             
             <div class="hidden-box">
                 <label class="notes-label">Notes:</label>
-                <textarea class="hidden-description" placeholder="Description" disabled>${task.description}</textarea>
+                <p class="no-notes">${task.description ? '' : 'No notes'}</p>
+                <textarea class="hidden-description" disabled>${task.description}</textarea>
                 <p class="hidden-priority">Priority:</p>
                 <div class="radio-container">
                     <input type="radio" id="high-${i}" name="priority-${i}" value="high" ${task.priority === 'high' ? 'checked' : ''}>
@@ -213,6 +252,10 @@ function displayFilteredTasks(filteredTasks) {
 
         </div>
         `;
+        // const taskField = document.querySelector('.task');
+        // if (task.priority === 'high') {
+        //     taskField.style.border = '1px solid red';
+        // }
         tasks.insertAdjacentHTML('afterbegin', taskHtml);
         task.completed && completedTasks++;
 
@@ -248,6 +291,34 @@ tasks.addEventListener('click', (event) => {
     }
 });
 
+function checkActive() {
+    const buttonsChildren = buttons.children;
+
+    [...buttonsChildren].forEach((button, index) => {
+      if (button.classList.contains('active')) {
+        console.log('Button ' + (index + 1) + ' is active.');
+        // You can use index + 1 or button.textContent to get the button text or index
+        switch (index) {
+            case 0:
+                displayAllTasks();
+                break;
+            case 1:
+                displayCompletedTasks();
+                break;
+            case 2:
+                displayPendingTasks();
+                break;
+            // Add more cases if needed
+
+            case 3:
+                displaySortedTasks();
+                break;
+        }
+
+      }
+    });
+  }
+
 // Complete/Uncomplete task
 
 // Event Delegation 
@@ -276,15 +347,23 @@ tasks.addEventListener('change', (event) => {
         // finds the closest ancestor of the event target that has the class 'task'.
         const taskElement = event.target.closest('.task');
         if (taskElement) {
+            const checkbox = taskElement.querySelector('.custom-checkbox');
             const taskIndex = taskElement.getAttribute('data-index');
             const isChecked = event.target.checked;
+            console.log(event.target.checked);
+            isChecked ? checkbox.classList.add('completed') : checkbox.classList.remove('completed');
+            // isChecked ? taskElement.style.opacity = '0.4' : taskElement.style.opacity = '1';
             console.log('the' + taskIndex);
             console.log('is checked' + isChecked);
             taskList[taskIndex].completed = isChecked;
             localStorage.setItem('tasks', JSON.stringify(taskList));
         }
     }
-})
+    console.log(taskList);
+    checkActive();
+    // displayFilteredTasks(taskList);
+    // displayAllTasks();
+});
 
 // Edit task
 tasks.addEventListener('click', (event) => {
@@ -317,6 +396,13 @@ tasks.addEventListener('click', (event) => {
                 // }
             } else {
                 event.target.textContent = 'EDIT';
+                if (textArea.value === '') {
+                    document.querySelector('.no-notes').innerHTML = 'No notes';
+                } else {
+                    document.querySelector('.no-notes').innerHTML = '';
+                }
+                
+
                 inputField.disabled = true;
                 textArea.disabled = true;
                 textArea.classList.remove('notDisabled');
@@ -404,33 +490,33 @@ tasks.addEventListener('change', (event) => {
 
 
 
+// arrow animation
+// tasks.addEventListener('click', (event) => {
+//     const taskElement = event.target.closest('.task');
 
-tasks.addEventListener('click', (event) => {
-    const taskElement = event.target.closest('.task');
+//     if (taskElement) {
+//         const icon = taskElement.querySelector('.icon');
+//         console.log(icon);
+//         console.log(event.target);
+//         if (icon && event.target === icon) {
+//             const hiddenBox = taskElement.querySelector('.hidden-box');
 
-    if (taskElement) {
-        const icon = taskElement.querySelector('.icon');
-        console.log(icon);
-        console.log(event.target);
-        if (icon && event.target === icon) {
-            const hiddenBox = taskElement.querySelector('.hidden-box');
+//             ['arrow-up', 'arrow-down'].forEach(id => {
+//                 const element = taskElement.querySelector(`#${id}`);
+//                 element.classList.toggle('hidden');
+//             });
 
-            ['arrow-up', 'arrow-down'].forEach(id => {
-                const element = taskElement.querySelector(`#${id}`);
-                element.classList.toggle('hidden');
-            });
+//             if (hiddenBox) {
+//                 const isVisible = hiddenBox.classList.contains('visible');
 
-            if (hiddenBox) {
-                const isVisible = hiddenBox.classList.contains('visible');
-
-                if (isVisible) {
-                    hiddenBox.style.maxHeight = '0';
-                    hiddenBox.classList.remove('visible');
-                } else {
-                    hiddenBox.classList.add('visible');
-                    hiddenBox.style.maxHeight = hiddenBox.scrollHeight + 'px';
-                }
-            }
-        }
-    }
-});
+//                 if (isVisible) {
+//                     hiddenBox.style.maxHeight = '0';
+//                     hiddenBox.classList.remove('visible');
+//                 } else {
+//                     hiddenBox.classList.add('visible');
+//                     hiddenBox.style.maxHeight = hiddenBox.scrollHeight + 'px';
+//                 }
+//             }
+//         }
+//     }
+// });

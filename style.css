@@ -332,3 +332,32 @@ svg {
 .hide {
     display: none;
 }
+
+
+/* .custom-checkbox input:checked {
+    text-decoration: line-through;
+  }
+  
+  .custom-checkbox input:not(:checked) {
+    text-decoration: none;
+  } */
+.custom-checkbox.completed + .input-task {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    color: rgba(0, 0, 0, 0.6);
+    text-decoration-color: black;
+}
+
+/* .task.completed {
+    opacity: 0.4;
+} */
+
+.no-notes {
+    font-size: 1.4rem;
+    color: #555;
+    padding: 0.8rem;
+}
+
+#errorMessage {
+    font-size: 1.4rem;
+}
