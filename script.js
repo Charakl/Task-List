@@ -58,14 +58,15 @@ createTaskBtn.addEventListener('click', () => {
             }
         // });
     });
-
+    const id = Math.floor(Math.random() * 10000) + 1;
     // Store info in localStorage
 
     const newTask = {
         title: title,
         description: description,
         priority: priority,
-        completed: false
+        completed: false,
+        id: id
     }
     console.log(taskList);
     console.log(newTask);
@@ -82,10 +83,11 @@ createTaskBtn.addEventListener('click', () => {
 
 allBtn.addEventListener('click', () => {
     console.log('all button clicked');
+    
+    // const children = buttons.children;
+    // [...children].forEach(c => c.classList.remove('active'));
+    // allBtn.classList.add('active');
     displayAllTasks();
-    const children = buttons.children;
-    [...children].forEach(c => c.classList.remove('active'));
-    allBtn.classList.add('active');
     // setButtonSelected('all');
 
 });
@@ -114,6 +116,7 @@ pendingBtn.addEventListener('click', () => {
 // Sort Tasks
 // *Remember that i have afterbegin to display the tasks!!!
 function displaySortedTasks () {
+    
     console.log('sort button clicked');
     // console.log(tasks);
     
@@ -128,7 +131,13 @@ function displaySortedTasks () {
         // task1 should come after task2.
         return priorityMap[task1.priority] - priorityMap[task2.priority];
     });
-      console.log(sortedTasks);
+    console.log(sortedTasks);
+    allTasksCount = 0;
+    completedTasksCount = 0;
+    allTasksCount = taskList.length;
+    taskList.forEach(task => task.completed && completedTasksCount++);
+    // hiddenDescription.style.height = hiddenDescription.scrollHeight + 'px';
+     
     displayFilteredTasks(sortedTasks);
     const children = buttons.children;
     [...children].forEach(c => c.classList.remove('active'));
@@ -143,12 +152,15 @@ function adjustTextareaHeight() {
     
 }
 
-
 // Function to display all the tasks
 function displayAllTasks() {
-    allTasksCount = 0;
+    const children = buttons.children;
+    [...children].forEach(c => c.classList.remove('active'));
+    allBtn.classList.add('active');
+    // allTasksCount = 0;
     completedTasksCount = 0;
     allTasksCount = taskList.length;
+    
     taskList.forEach(task => task.completed && completedTasksCount++);
     // hiddenDescription.style.height = hiddenDescription.scrollHeight + 'px';
      
@@ -159,16 +171,23 @@ function displayAllTasks() {
 // Function to display completed tasks
 function displayCompletedTasks() {
     const completedTasks = taskList.filter(task => task.completed);
+    console.log(completedTasks);
+    console.log(completedTasks.length);
+    completedTasksCount = completedTasks.length;
     displayFilteredTasks(completedTasks);
 }
 
 // Function to display pending tasks
 function displayPendingTasks() {
     const pendingTasks = taskList.filter(task => !task.completed);
+    const completedTasks = taskList.length - pendingTasks.length;
+    completedTasksCount = completedTasks;
     displayFilteredTasks(pendingTasks);
 }
 
 function displayFilteredTasks(filteredTasks) {
+    // completedTasksCount = 0;
+    // allTasksCount = taskList.length;
     tasks.innerHTML = '';
     let completedTasks = 0;
 
@@ -189,14 +208,12 @@ function displayFilteredTasks(filteredTasks) {
             case 'low':
                 borderColor = '#ADFF2F';
                 break;
-            // Add more cases if needed
-
             default:
-                borderColor = 'black'; // Default color if priority is not recognized
+                borderColor = 'black';
         }
 
         const taskHtml = `
-        <div class="task ${task.completed ? 'completed' : ''}" data-index="${i}" style="border: 2px solid ${borderColor};">
+        <div class="task ${task.completed ? 'completed' : ''}" data-index="${task.id}" style="border: 2px solid ${borderColor};">
             
             <!-- added the checked class for the line-through style -->
             <label class="custom-checkbox ${task.completed ? 'completed' : ''}">
@@ -236,17 +253,17 @@ function displayFilteredTasks(filteredTasks) {
                 <p class="hidden-priority">Priority:</p>
                 <div class="radio-container">
                     <input type="radio" id="high-${i}" name="priority-${i}" value="high" ${task.priority === 'high' ? 'checked' : ''}>
-                    <label for="high-${i}">High</label>
+                    <label for="high-${i}" style="font-size: 1.6rem;">High</label>
 
                     <input type="radio" id="medium-${i}" name="priority-${i}" value="medium" ${task.priority === 'medium' ? 'checked' : ''}>
-                    <label for="medium-${i}">Medium</label>
+                    <label for="medium-${i}" style="font-size: 1.6rem;">Medium</label>
 
                     <input type="radio" id="low-${i}" name="priority-${i}" value="low" ${task.priority === 'low' ? 'checked' : ''}>
-                    <label for="low-${i}">Low</label>
+                    <label for="low-${i}" style="font-size: 1.6rem;">Low</label>
                 </div>
                 <div class="action-buttons">
-                    <button data-index="${i}" class="edit btn">EDIT</button>
-                    <button data-index="${i}" class="delete btn">DELETE</button>
+                    <button data-index="${task.id}" class="edit btn">EDIT</button>
+                    <button data-index="${task.id}" class="delete btn">DELETE</button>
                 </div>
             </div>
 
@@ -274,22 +291,22 @@ displayAllTasks();
 
 // Attach a click event listener to the tasks container (Event delegation)
 // Delete task
-tasks.addEventListener('click', (event) => {
-    if (event.target.classList.contains('delete')) {
-        // Find the index of the task to delete
-        const taskIndex = event.target.getAttribute('data-index');
-        console.log(taskIndex);
-        if (taskIndex !== null) {
-            // Delete the task and update the UI and local storage
-            taskList.splice(taskIndex, 1);
-            console.log(taskList);
-            // updateTaskList();
-            localStorage.setItem('tasks', JSON.stringify(taskList));
-            // updateLocalStorage(taskList);
-            displayAllTasks(); // Update the displayed tasks after deletion
-        }
-    }
-});
+// tasks.addEventListener('click', (event) => {
+//     if (event.target.classList.contains('delete')) {
+//         // Find the index of the task to delete
+//         const taskIndex = event.target.getAttribute('data-index');
+//         console.log(taskIndex);
+//         if (taskIndex !== null) {
+//             // Delete the task and update the UI and local storage
+//             taskList.splice(taskIndex, 1);
+//             console.log(taskList);
+//             // updateTaskList();
+//             localStorage.setItem('tasks', JSON.stringify(taskList));
+//             // updateLocalStorage(taskList);
+//             displayAllTasks(); // Update the displayed tasks after deletion
+//         }
+//     }
+// });
 
 function checkActive() {
     const buttonsChildren = buttons.children;
@@ -308,18 +325,15 @@ function checkActive() {
             case 2:
                 displayPendingTasks();
                 break;
-            // Add more cases if needed
-
             case 3:
                 displaySortedTasks();
                 break;
         }
-
       }
     });
   }
 
-// Complete/Uncomplete task
+
 
 // Event Delegation 
 // The event listener is attached to the tasks element. It listens for the 'change' event bubbling up from 
@@ -339,97 +353,193 @@ function checkActive() {
 // manage events on behalf of its children. This term is commonly used in software development and 
 // programming to describe this method of event handling.
 
-tasks.addEventListener('change', (event) => {
-    // It ensures that the change event is related to an element with the 'checkbox' class.
-    // event.target -> where the event originated
-    console.log(event.target);
-    if (event.target.classList.contains('checkbox')) {
-        // finds the closest ancestor of the event target that has the class 'task'.
-        const taskElement = event.target.closest('.task');
-        if (taskElement) {
-            const checkbox = taskElement.querySelector('.custom-checkbox');
-            const taskIndex = taskElement.getAttribute('data-index');
-            const isChecked = event.target.checked;
-            console.log(event.target.checked);
-            isChecked ? checkbox.classList.add('completed') : checkbox.classList.remove('completed');
-            // isChecked ? taskElement.style.opacity = '0.4' : taskElement.style.opacity = '1';
-            console.log('the' + taskIndex);
-            console.log('is checked' + isChecked);
-            taskList[taskIndex].completed = isChecked;
+// Edit, Delete, and Complete/Uncomplete Actions
+tasks.addEventListener('click', (event) => {
+    const editButton = event.target.closest('.edit');
+    const deleteButton = event.target.closest('.delete');
+    const checkbox = event.target.closest('.checkbox');
+
+    if (editButton) {
+        handleEditAction(editButton);
+    } else if (deleteButton) {
+        handleDeleteAction(deleteButton);
+    } else if (checkbox) {
+        handleCheckboxAction(checkbox);
+    }
+});
+
+
+// Function to handle the Edit action
+function handleEditAction(editButton) {
+    console.log('Edit button clicked');
+    const id = editButton.getAttribute('data-index');
+    const taskIndex = taskList.findIndex(task => task.id === Number(id));
+
+    if (taskIndex !== null) {
+        const taskElement = editButton.closest('.task');
+        const inputField = taskElement.querySelector('.input-task');
+        const textArea = taskElement.querySelector('.hidden-description');
+
+        inputField.disabled = !inputField.disabled;
+        textArea.disabled = !textArea.disabled;
+
+        // Change the button text to 'Save'
+        editButton.textContent = inputField.disabled ? 'EDIT' : 'SAVE';
+
+        if (!inputField.disabled) {
+            inputField.style.borderBottom = '1px solid black';
+            textArea.classList.add('notDisabled');
+        } else {
+            if (textArea.value === '') {
+                document.querySelector('.no-notes').innerHTML = 'No notes';
+            } else {
+                document.querySelector('.no-notes').innerHTML = '';
+            }
+
+            inputField.style.borderBottom = 'none';
+            textArea.classList.remove('notDisabled');
+            adjustTextareaHeight();
+
+            taskList[taskIndex].title = inputField.value;
+            taskList[taskIndex].description = textArea.value;
             localStorage.setItem('tasks', JSON.stringify(taskList));
         }
     }
-    console.log(taskList);
-    checkActive();
-    // displayFilteredTasks(taskList);
-    // displayAllTasks();
-});
+}
+
+// Function to handle the Delete action
+function handleDeleteAction(deleteButton) {
+    console.log('Delete button clicked');
+    const id = deleteButton.getAttribute('data-index');
+    const taskIndex = taskList.findIndex(task => task.id === Number(id));
+
+    if (taskIndex !== null) {
+        taskList.splice(taskIndex, 1);
+        localStorage.setItem('tasks', JSON.stringify(taskList));
+        displayAllTasks(); // Update the displayed tasks after deletion
+    }
+}
+
+// Function to handle the Completed/Uncompleted action
+function handleCheckboxAction(checkbox) {
+    console.log('Checkbox clicked');
+    const id = checkbox.closest('.task').getAttribute('data-index');
+    const taskIndex = taskList.findIndex(task => task.id === Number(id));
+
+    if (taskIndex !== null) {
+        const isChecked = checkbox.checked;
+        const taskElement = checkbox.closest('.task');
+        const checkboxElement = taskElement.querySelector('.custom-checkbox');
+
+        isChecked ? checkboxElement.classList.add('completed') : checkboxElement.classList.remove('completed');
+        isChecked ? taskElement.style.opacity = '0.4' : taskElement.style.opacity = '1';
+        taskList[taskIndex].completed = isChecked;
+        localStorage.setItem('tasks', JSON.stringify(taskList));
+        checkActive();
+    }
+}
+
+// Complete/Uncomplete task
+// tasks.addEventListener('change', (event) => {
+//     // It ensures that the change event is related to an element with the 'checkbox' class.
+//     // event.target -> where the event originated
+//     console.log(event.target);
+    
+//     if (event.target.classList.contains('checkbox')) {
+//         // finds the closest ancestor of the event target that has the class 'task'.
+//         const taskElement = event.target.closest('.task');
+//         if (taskElement) {
+//             const checkbox = taskElement.querySelector('.custom-checkbox');
+//             const id = taskElement.getAttribute('data-index');
+//             console.log(typeof id);
+//             const taskIndex = taskList.findIndex(task => task.id === Number(id));
+//             console.log(typeof taskIndex);
+//             const isChecked = event.target.checked;
+//             console.log(event.target.checked);
+//             isChecked ? checkbox.classList.add('completed') : checkbox.classList.remove('completed');
+//             // isChecked ? taskElement.style.opacity = '0.4' : taskElement.style.opacity = '1';
+//             console.log('the' + taskIndex);
+//             console.log('is checked' + isChecked);
+//             taskList[taskIndex].completed = isChecked;
+//             localStorage.setItem('tasks', JSON.stringify(taskList));
+//         }
+//     }
+//     console.log(taskList);
+//     checkActive();
+//     // displayFilteredTasks(taskList);
+//     // displayAllTasks();
+    
+// });
 
 // Edit task
-tasks.addEventListener('click', (event) => {
-    if (event.target.classList.contains('edit')) {
-        // Find the index of the task to edit
-        const taskIndex = event.target.getAttribute('data-index');
-        console.log(taskIndex);
+// tasks.addEventListener('click', (event) => {
+//     console.log('Save button clicked');
+//     if (event.target.classList.contains('edit')) {
+//         // Find the index of the task to edit
+//         const id = event.target.getAttribute('data-index');
+//         console.log(id);
+//         const taskIndex = taskList.findIndex(task => task.id === Number(id));
+//         console.log(taskIndex);
 
-        if (taskIndex !== null) {
-            // Allow editing of the task details by enabling the input field
-            const taskElement = event.target.closest('.task');
-            const inputField = taskElement.querySelector('.input-task');
-            // getElementEyId will not work
-            const textArea = taskElement.querySelector('.hidden-description');
-            inputField.disabled = false;
-            textArea.disabled = false;
+//         if (taskIndex !== null) {
+//             // Allow editing of the task details by enabling the input field
+//             const taskElement = event.target.closest('.task');
+//             const inputField = taskElement.querySelector('.input-task');
+//             // getElementEyId will not work
+//             const textArea = taskElement.querySelector('.hidden-description');
+//             inputField.disabled = false;
+//             textArea.disabled = false;
 
-            // Change the button text to 'Save'
-            // event.target.textContent = 'SAVE';
-            // event.target.textContent === 'EDIT' ? event.target.textContent = 'SAVE' : event.target.textContent = 'EDIT';
-            if (event.target.textContent === 'EDIT') {
-                event.target.textContent = 'SAVE';
-                // inputField.classList.add('')
-                inputField.disabled ? '' : inputField.style.borderBottom = '1px solid black';
-                textArea.classList.add('notDisabled');
-                // if (!textArea.disabled) {
-                //     textArea.style.border = '1px solid red';
-                //     textArea.style.pointerEvents = 'auto';
-                //     textArea.style.resize = 'both';
-                // }
-            } else {
-                event.target.textContent = 'EDIT';
-                if (textArea.value === '') {
-                    document.querySelector('.no-notes').innerHTML = 'No notes';
-                } else {
-                    document.querySelector('.no-notes').innerHTML = '';
-                }
+//             // Change the button text to 'Save'
+//             // event.target.textContent = 'SAVE';
+//             // event.target.textContent === 'EDIT' ? event.target.textContent = 'SAVE' : event.target.textContent = 'EDIT';
+//             if (event.target.textContent === 'EDIT') {
+//                 event.target.textContent = 'SAVE';
+//                 // inputField.classList.add('')
+//                 inputField.disabled ? '' : inputField.style.borderBottom = '1px solid black';
+//                 textArea.classList.add('notDisabled');
+//                 // if (!textArea.disabled) {
+//                 //     textArea.style.border = '1px solid red';
+//                 //     textArea.style.pointerEvents = 'auto';
+//                 //     textArea.style.resize = 'both';
+//                 // }
+//             } else {
+//                 event.target.textContent = 'EDIT';
+//                 if (textArea.value === '') {
+//                     document.querySelector('.no-notes').innerHTML = 'No notes';
+//                 } else {
+//                     document.querySelector('.no-notes').innerHTML = '';
+//                 }
                 
 
-                inputField.disabled = true;
-                textArea.disabled = true;
-                textArea.classList.remove('notDisabled');
-                inputField.disabled && (inputField.style.borderBottom = 'none');
-                console.log(inputField.value);
-                adjustTextareaHeight();
-                // inputField.disabled ? '' : inputField.style.borderBottom = '1px solid red';
-                // if (!textArea.disabled) {
-                //     textArea.style.border = '1px solid red';
-                //     textArea.style.pointerEvents = 'auto';
-                //     textArea.style.resize = 'both';
-                // }
-                // const newTask = {
-                //     title: title,
-                //     description: description,
-                //     priority: priority,
-                //     completed: false
-                // }
-                taskList[taskIndex].title = inputField.value;
-                taskList[taskIndex].description = textArea.value;
-                localStorage.setItem('tasks', JSON.stringify(taskList));
-            }
-            // Stop the propagation of this specific event
-            event.stopPropagation();
-        }
-    }
-});
+//                 inputField.disabled = true;
+//                 textArea.disabled = true;
+//                 textArea.classList.remove('notDisabled');
+//                 inputField.disabled && (inputField.style.borderBottom = 'none');
+//                 console.log(inputField.value);
+//                 console.log(textArea.value);
+//                 adjustTextareaHeight();
+//                 // inputField.disabled ? '' : inputField.style.borderBottom = '1px solid red';
+//                 // if (!textArea.disabled) {
+//                 //     textArea.style.border = '1px solid red';
+//                 //     textArea.style.pointerEvents = 'auto';
+//                 //     textArea.style.resize = 'both';
+//                 // }
+//                 // const newTask = {
+//                 //     title: title,
+//                 //     description: description,
+//                 //     priority: priority,
+//                 //     completed: false
+//                 // }
+//                 taskList[taskIndex].title = inputField.value;
+//                 taskList[taskIndex].description = textArea.value;
+//                 localStorage.setItem('tasks', JSON.stringify(taskList));
+//             }
+//             // Stop the propagation of this specific event
+//             event.stopPropagation();
+//         }
+//     }
+// });
 
 // Edit task priority
 tasks.addEventListener('change', (event) => {
@@ -491,32 +601,32 @@ tasks.addEventListener('change', (event) => {
 
 
 // arrow animation
-// tasks.addEventListener('click', (event) => {
-//     const taskElement = event.target.closest('.task');
+tasks.addEventListener('click', (event) => {
+    const taskElement = event.target.closest('.task');
 
-//     if (taskElement) {
-//         const icon = taskElement.querySelector('.icon');
-//         console.log(icon);
-//         console.log(event.target);
-//         if (icon && event.target === icon) {
-//             const hiddenBox = taskElement.querySelector('.hidden-box');
+    if (taskElement) {
+        const icon = taskElement.querySelector('.icon');
+        console.log(icon);
+        console.log(event.target);
+        if (icon && event.target === icon) {
+            const hiddenBox = taskElement.querySelector('.hidden-box');
 
-//             ['arrow-up', 'arrow-down'].forEach(id => {
-//                 const element = taskElement.querySelector(`#${id}`);
-//                 element.classList.toggle('hidden');
-//             });
+            ['arrow-up', 'arrow-down'].forEach(id => {
+                const element = taskElement.querySelector(`#${id}`);
+                element.classList.toggle('hidden');
+            });
 
-//             if (hiddenBox) {
-//                 const isVisible = hiddenBox.classList.contains('visible');
+            if (hiddenBox) {
+                const isVisible = hiddenBox.classList.contains('visible');
 
-//                 if (isVisible) {
-//                     hiddenBox.style.maxHeight = '0';
-//                     hiddenBox.classList.remove('visible');
-//                 } else {
-//                     hiddenBox.classList.add('visible');
-//                     hiddenBox.style.maxHeight = hiddenBox.scrollHeight + 'px';
-//                 }
-//             }
-//         }
-//     }
-// });
+                if (isVisible) {
+                    hiddenBox.style.maxHeight = '0';
+                    hiddenBox.classList.remove('visible');
+                } else {
+                    hiddenBox.classList.add('visible');
+                    hiddenBox.style.maxHeight = hiddenBox.scrollHeight + 'px';
+                }
+            }
+        }
+    }
+});
