@@ -39,6 +39,39 @@
             <button id="sort-btn" class="btn pos-helper">Sort</button>
         </div>
 
+        <!-- <div class="buttons mobile">
+            <select id="dropdown-menu">
+                <option value="all" id="all-btn" selected="selected">All <span id="all" class="number"></span></option>
+                <option value="completed" id="completed-btn">Completed <span id="completed" class="number"></span></option>
+                <option value="pending" id="pending-btn">Pending <span id="pending" class="number"></span></option>
+                <option value="sorted" id="sort-btn">Sort</option>
+            </select>
+        </div> -->
+
+        <div class="custom-dropdown">
+            <div class="container">
+                <span class="selected-option">All</span>
+                <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke-width="1.5" 
+                    stroke="currentColor" 
+                    id="arrow-down"
+                    class="dropdown-icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+            </div>
+            
+            
+            <ul class="dropdown-list">
+                <li data-value="all">All</li>
+                <li data-value="completed">Completed</li>
+                <li data-value="pending">Pending</li>
+                <li data-value="sort">Sort</li>
+            </ul>
+        </div>
+
         
 
         <div class="tasks">

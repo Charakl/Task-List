@@ -20,8 +20,6 @@ body {
 
 main {
     max-width: 120rem;
-    /* text-align: center; */
-    border: 1px solid red;
     margin: 0 auto;
     padding: 10rem;
 }
@@ -203,6 +201,13 @@ input[type="radio"]:focus {
     border-radius: 50%;
 }
 
+.dropdown-icon {
+    width: 24px;
+    height: 24px;
+    stroke: var(--main-color);
+    margin-left: 1rem;
+}
+
 .action-buttons {
     /* border: 1px solid red; */
     text-align: right;
@@ -363,8 +368,90 @@ svg {
     font-size: 1.4rem;
 }
 
+/* #dropdown-menu {
+    padding: 0.4rem 0.8rem;
+    font-size: 1.6rem;
+    font-family: 'Playpen Sans';
+    border: 2px solid var(--dark-grey-color);
+    border-radius: 1rem;
+}
+
+#dropdown-menu:focus {
+    background-color: #f0f0f0; 
+    color: #000; 
+} */
 
 
+/* Style the custom dropdown container */
+.custom-dropdown {
+    position: relative;
+    /* display: inline-block; */
+    cursor: pointer;
+    /* display: flex; */
+    /* justify-content: center; */
+    /* border: 1px solid red; */
+    width: 16rem;
+    display: none;
+    
+    z-index: 110;
+    font-size: 1.6rem;
+    margin: 0 auto;
+    margin-bottom: 4rem;
+}
+
+/* Style the selected option */
+.container {
+    padding: 8px;
+    border: 2px solid var(--dark-grey-color);
+    border-radius: 1rem;
+    
+    background-color: #fff;
+    display: inline-block;
+    width: 16rem;
+    /* text-align: center; */
+    display: flex;
+    justify-content: center;
+}
+
+.container.dropdown-shown {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+/* Style the dropdown list */
+.dropdown-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+    top: 4.4rem;
+    position: absolute;
+    background-color: #fff;
+    border: 2px solid var(--dark-grey-color);
+    border-radius: 1rem;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    width: 16rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style the dropdown list items */
+.dropdown-list li {
+    padding: 8px;
+    cursor: pointer;
+    
+    text-align: center;
+    
+}
+
+/* Show the dropdown list when the container is hovered */
+/* .custom-dropdown:hover .dropdown-list {
+    display: block;
+} */
+
+.dropdown-list.show {
+    display: block;
+}
 
 
 /* 900 / 16 = 56 */
@@ -421,6 +508,14 @@ svg {
 /* BELOW 496px (31 * 16) (Mobile) */
 /* ********************************* */
 @media (max-width: 31em) {
+
+    .custom-dropdown {
+        display: block;
+    }
+
+    .buttons {
+        display: none;
+    }
 
     #task-title {
         width: 98%;

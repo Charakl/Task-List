@@ -20,6 +20,13 @@ const arrow = document.querySelector('.icon');
 
 const buttons = document.querySelector('.buttons');
 
+// const dropdownMenu = document.getElementById("dropdown-menu");
+
+const selectedOption = document.querySelector(".selected-option");
+    const dropdownList = document.querySelector(".dropdown-list");
+    const container = document.querySelector(".container");
+
+
 
 let taskList = JSON.parse(localStorage.getItem('tasks')) || [];
 
@@ -81,7 +88,8 @@ createTaskBtn.addEventListener('click', () => {
     
 })
 
-allBtn.addEventListener('click', () => {
+allBtn.addEventListener('click', (e) => {
+    // e.preventDefault();
     console.log('all button clicked');
     
     // const children = buttons.children;
@@ -289,6 +297,108 @@ function displayFilteredTasks(filteredTasks) {
 
 displayAllTasks();
 
+    
+// Mobile Dropdown Menu
+// dropdownList.addEventListener("change", function () {
+//     const selectedValue = selectedOption.textContent;
+//     console.log("Selected option: " + selectedValue);
+//     switch (selectedValue) {
+//         case 'All':
+//             displayAllTasks();
+//             break;
+//         case 'Completed':
+//             displayCompletedTasks();
+//             break;
+//         case 'Pending':
+//             displayPendingTasks();
+//             break;
+//         case 'Sort':
+//             displaySortedTasks();
+//             break;
+//     }
+// });
+
+
+
+// document.addEventListener("DOMContentLoaded", function () {
+    
+
+    
+    // Function to handle item click
+    function handleItemClick(event) {
+        if (event.target.tagName === "LI") {
+            
+            // Update the selected option text
+            selectedOption.textContent = event.target.textContent;
+            console.log(selectedOption.textContent);
+
+            // Close the dropdown
+            // dropdownList.style.display = "none";
+            dropdownList.classList.remove("show");
+            container.classList.remove("dropdown-shown");
+            const selectedValue = selectedOption.textContent;
+            console.log("Selected option: " + selectedValue);
+            switch (selectedValue) {
+                case 'All':
+                    displayAllTasks();
+                    break;
+                case 'Completed':
+                    displayCompletedTasks();
+                    break;
+                case 'Pending':
+                    displayPendingTasks();
+                    break;
+                case 'Sort':
+                    displaySortedTasks();
+                    break;
+            }
+
+            
+        }
+    }
+
+    dropdownList.addEventListener("click", handleItemClick);
+
+    document.querySelector(".custom-dropdown").addEventListener("mouseenter", function() {
+        // Show the dropdown by adding the "show" class
+        dropdownList.classList.add("show");
+        container.classList.add("dropdown-shown");
+    });
+    
+    // Hide the dropdown list when the container is not hovered
+    document.querySelector(".custom-dropdown").addEventListener("mouseleave", function() {
+        // Hide the dropdown by removing the "show" class
+        dropdownList.classList.remove("show");
+        container.classList.remove("dropdown-shown");
+    });
+
+    
+        // Function to attach event listeners
+        // function attachEventListeners() {
+        //     // Add click event listener to the dropdown list items
+        //     dropdownList.addEventListener("click", handleItemClick);
+    
+        //     // Close the dropdown when clicking outside of it
+        //     document.addEventListener("click", handleDocumentClick);
+    
+        //     // Show or hide the dropdown list on custom dropdown click
+        //     selectedOption.addEventListener("click", function () {
+        //         dropdownList.style.display = dropdownList.style.display === "block" ? "none" : "block";
+        //     });
+        // }
+    
+        // // Function to handle document click
+        // function handleDocumentClick(event) {
+        //     if (!dropdownList.contains(event.target)) {
+        //         dropdownList.style.display = "none";
+        //         document.removeEventListener("click", handleDocumentClick);
+        //     }
+        // }
+    
+        // // Initial attachment of event listeners
+        // attachEventListeners();
+   
+// });
 // Attach a click event listener to the tasks container (Event delegation)
 // Delete task
 // tasks.addEventListener('click', (event) => {
@@ -309,6 +419,7 @@ displayAllTasks();
 // });
 
 function checkActive() {
+    console.log('active desktop');
     const buttonsChildren = buttons.children;
 
     [...buttonsChildren].forEach((button, index) => {
@@ -331,7 +442,27 @@ function checkActive() {
         }
       }
     });
-  }
+}
+
+function checkActiveMobile() {
+    console.log('active mob');
+    const value = selectedOption.textContent;
+    switch (value) {
+        case 'All':
+            displayAllTasks();
+            break;
+        case 'Completed':
+            displayCompletedTasks();
+            break;
+        case 'Pending':
+            displayPendingTasks();
+            break;
+        case 'Sort':
+            displaySortedTasks();
+            break;
+    }
+    
+}
 
 
 
@@ -435,7 +566,17 @@ function handleCheckboxAction(checkbox) {
         isChecked ? taskElement.style.opacity = '0.4' : taskElement.style.opacity = '1';
         taskList[taskIndex].completed = isChecked;
         localStorage.setItem('tasks', JSON.stringify(taskList));
-        checkActive();
+        const computedStyle = window.getComputedStyle(buttons);
+        const displayStyle = computedStyle.display;
+        displayStyle === 'flex' ? checkActive() : checkActiveMobile();
+        // if (buttons.style.display === 'flex'){
+        //     checkActive;
+        // }
+        // checkActiveMobile();
+        // Prevent some default behavior (scroll up or refresh)
+        // if (e.target === checkbox) {
+        //     e.preventDefault();
+        // }
     }
 }
 
