@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="media-queries.css">
     <title>Task List</title>
 </head>
 <body>
@@ -39,15 +40,6 @@
             <button id="sort-btn" class="btn pos-helper">Sort</button>
         </div>
 
-        <!-- <div class="buttons mobile">
-            <select id="dropdown-menu">
-                <option value="all" id="all-btn" selected="selected">All <span id="all" class="number"></span></option>
-                <option value="completed" id="completed-btn">Completed <span id="completed" class="number"></span></option>
-                <option value="pending" id="pending-btn">Pending <span id="pending" class="number"></span></option>
-                <option value="sorted" id="sort-btn">Sort</option>
-            </select>
-        </div> -->
-
         <div class="custom-dropdown">
             <div class="container">
                 <span class="selected-option">All</span>
@@ -63,7 +55,6 @@
                 </svg>
             </div>
             
-            
             <ul class="dropdown-list">
                 <li data-value="all">All</li>
                 <li data-value="completed">Completed</li>
@@ -72,11 +63,7 @@
             </ul>
         </div>
 
-        
-
-        <div class="tasks">
-            
-        </div>
+        <div class="tasks"></div>
     </main>
     <script src="script.js"></script>
 </body>

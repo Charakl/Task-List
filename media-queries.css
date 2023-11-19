@@ -1,0 +1,74 @@
+/* 900 / 16 = 56 */
+/* ********************************* */
+/* BELOW 896px (84 * 16) (Smaller Desktops) */
+/* ********************************* */
+@media (max-width: 56em) {
+    main {
+      max-width: 100%;
+      padding: 2rem;
+    }
+}
+
+/* 765 / 16 = 48 */
+/* ********************************* */
+/* BELOW 768px (48 * 16) (Landscape Tablets) */
+/* ********************************* */
+@media (max-width: 48em) {
+    html {
+        /* 9px / 16px = 0.5625 */
+        font-size: 56.25%;
+    }
+}
+
+
+/* 690 / 16 = 43 */
+/* ********************************* */
+/* BELOW 688px (43 * 16) (Landscape Tablets) */
+/* ********************************* */
+@media (max-width: 43em) {
+    #task-title, 
+    #task-description, 
+    .task {
+        width: 98%;
+    }
+
+    .action-buttons {
+        margin-top: 3rem;
+        text-align: left;
+        margin-left: 0.8rem;
+    }
+}
+
+
+/* 500 / 16 = 31 */
+/* ********************************* */
+/* BELOW 496px (31 * 16) (Mobile) */
+/* ********************************* */
+@media (max-width: 31em) {
+    .custom-dropdown {
+        display: block;
+    }
+
+    .buttons {
+        display: none;
+    }
+
+    .action-buttons {
+        margin-top: 3rem;
+        text-align: left;
+        margin-left: 0.8rem;
+    }
+
+    .task {
+        padding: 1rem;
+    }
+
+    .hidden-box {
+        grid-column: 1 / 4;
+    }
+
+    input[type="radio"] + label {
+        margin: 0 4px; /* Add spacing between boxes */
+    }
+  
+}

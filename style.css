@@ -31,7 +31,6 @@ h1 {
     font-weight: 700;
     color: var(--main-color);
     letter-spacing: 0.5rem;
-    /* text-shadow: 0px 2px 4px var(--main-color); */
 }
 
 #task-title {
@@ -68,12 +67,6 @@ h1 {
 input[type="radio"] {
     display: none;
 }
-  
-  /* Style the radio container (optional) */
-/* .radio-container {
-    display: flex;
-} */
-  
 
 input[type="radio"] + label {
     display: inline-block;
@@ -104,17 +97,10 @@ input[type="radio"]:checked + label {
     background-color: var(--main-color);
     color: #fff;
     transition: all 0.3s ease;
-    /* box-shadow: 0 4px  0px var(--main-color); */
 }
 
 .create-task-btn:hover {
-    /* border-color: var(--main-color); */
     background-color: rgba(99, 84, 214, 0.8);
-    /* color: var(--main-color); */
-    /* box-shadow: 0 0 0 var(--main-color); */
-    /* transform: translateY(4px); */
-    
-
 }
 
 .btn {
@@ -159,7 +145,6 @@ input[type="radio"]:focus {
     display: grid;
     grid-template-columns: auto 1fr auto;
     column-gap: 2rem;
-    /* height: 14rem; */
     margin: 0 auto;
     position: relative;
     box-shadow:  0 0 32px rgba(0, 0, 0, 0.1);
@@ -168,8 +153,6 @@ input[type="radio"]:focus {
 }
 
 .input-task {
-    /* width: 100%; */
-    /* height: 4rem; */
     border: none;
     color: #000;
     font-size: 1.6rem;
@@ -209,12 +192,7 @@ input[type="radio"]:focus {
 }
 
 .action-buttons {
-    /* border: 1px solid red; */
     text-align: right;
-    /* position: absolute;
-    top: 50%;
-    right: 16rem;
-    transform: translateY(-50%); */
 }
 
 .number {
@@ -312,20 +290,6 @@ input[type="radio"]:focus {
     margin-bottom: 0.6rem;
 }
 
-/* svg {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  
-  .visible {
-    opacity: 1;
-    transform: rotate(0deg);
-  }
-  
-  .hidden {
-    opacity: 0;
-    transform: rotate(180deg);
-  } */
-
 svg {
     transition: transform 0.3s ease;
 }
@@ -339,14 +303,6 @@ svg {
     display: none;
 }
 
-
-/* .custom-checkbox input:checked {
-    text-decoration: line-through;
-  }
-  
-  .custom-checkbox input:not(:checked) {
-    text-decoration: none;
-  } */
 .custom-checkbox.completed + .input-task {
     text-decoration: line-through;
     text-decoration-thickness: 2px;
@@ -368,31 +324,12 @@ svg {
     font-size: 1.4rem;
 }
 
-/* #dropdown-menu {
-    padding: 0.4rem 0.8rem;
-    font-size: 1.6rem;
-    font-family: 'Playpen Sans';
-    border: 2px solid var(--dark-grey-color);
-    border-radius: 1rem;
-}
-
-#dropdown-menu:focus {
-    background-color: #f0f0f0; 
-    color: #000; 
-} */
-
-
 /* Style the custom dropdown container */
 .custom-dropdown {
     position: relative;
-    /* display: inline-block; */
     cursor: pointer;
-    /* display: flex; */
-    /* justify-content: center; */
-    /* border: 1px solid red; */
     width: 16rem;
     display: none;
-    
     z-index: 110;
     font-size: 1.6rem;
     margin: 0 auto;
@@ -404,11 +341,9 @@ svg {
     padding: 8px;
     border: 2px solid var(--dark-grey-color);
     border-radius: 1rem;
-    
     background-color: #fff;
     display: inline-block;
     width: 16rem;
-    /* text-align: center; */
     display: flex;
     justify-content: center;
 }
@@ -444,123 +379,6 @@ svg {
     
 }
 
-/* Show the dropdown list when the container is hovered */
-/* .custom-dropdown:hover .dropdown-list {
-    display: block;
-} */
-
 .dropdown-list.show {
     display: block;
-}
-
-
-/* 900 / 16 = 56 */
-/* ********************************* */
-/* BELOW 896px (84 * 16) (Smaller Desktops) */
-/* ********************************* */
-@media (max-width: 56em) {
-    main {
-      max-width: 100%;
-      padding: 2rem;
-    }
-}
-
-/* 765 / 16 = 48 */
-/* ********************************* */
-/* BELOW 768px (48 * 16) (Landscape Tablets) */
-/* ********************************* */
-@media (max-width: 48em) {
-    html {
-        /* 9px / 16px = 50 */
-        font-size: 56.25%;
-    }
-}
-
-
-/* 690 / 16 = 43 */
-/* ********************************* */
-/* BELOW 688px (43 * 16) (Landscape Tablets) */
-/* ********************************* */
-@media (max-width: 43em) {
-
-    #task-title {
-        width: 98%;
-    }
-    
-    #task-description {
-        width: 98%;
-    }
-
-    .task {
-        width: 98%;
-    }
-
-    .action-buttons {
-        margin-top: 3rem;
-        text-align: left;
-        margin-left: 0.8rem;
-    }
-}
-
-
-/* 500 / 16 = 31 */
-/* ********************************* */
-/* BELOW 496px (31 * 16) (Mobile) */
-/* ********************************* */
-@media (max-width: 31em) {
-
-    .custom-dropdown {
-        display: block;
-    }
-
-    .buttons {
-        display: none;
-    }
-
-    #task-title {
-        width: 98%;
-    }
-    
-    #task-description {
-        width: 98%;
-    }
-
-    .task {
-        width: 98%;
-    }
-
-    .action-buttons {
-        margin-top: 3rem;
-        text-align: left;
-        margin-left: 0.8rem;
-    }
-
-    .task {
-        /* width: 70rem;
-        height: auto; */
-        padding: 1rem;
-        /* display: grid;
-        grid-template-columns: auto 1fr auto;
-        column-gap: 2rem;
-        margin: 0 auto;
-        position: relative;
-        box-shadow:  0 0 32px rgba(0, 0, 0, 0.1);
-        margin-bottom: 4rem;
-        border-radius: 1.4rem; */
-    }
-
-
-    .hidden-box {
-        /* font-size: 1.8rem; */
-        grid-column: 1 / 4;
-        /* max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease-in-out; */
-    }
-
-    input[type="radio"] + label {
-        margin: 0 4px; /* Add spacing between boxes */
-    }
-
-  
 }
